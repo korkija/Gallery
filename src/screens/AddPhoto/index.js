@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
+import {SelectPhoto} from '../../components/SelectPhoto/SelectPhoto';
 
 export class AddPhotoScreen extends Component {
   render() {
@@ -7,6 +8,7 @@ export class AddPhotoScreen extends Component {
       <View>
         <View>
           <Text>Hello add Photo</Text>
+          <SelectPhoto />
         </View>
       </View>
     );
