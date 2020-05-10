@@ -1,29 +1,40 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Text} from 'react-native';
 import {AddPhotoScreen, GalleryScreen} from '../screens';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const ScreensStack = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <Tab.Navigator
         screenOptions={{
           headerShown: false,
           cardStyle: {backgroundColor: 'transparent'},
+        }}
+        tabBarOptions={{
+          activeTintColor: '#B5B5B5',
+          inactiveTintColor: '#2F2E2E',
+          activeBackgroundColor: '#2F2E2E',
+          inactiveBackgroundColor: '#B5B5B5',
         }}>
-        <Stack.Screen
-          options={{title: 'Gallery'}}
+        <Tab.Screen
+          options={{
+            tabBarLabel: () => <Text style={{fontSize: 26}}>Gallery</Text>,
+          }}
           name="galleryScreen"
           component={GalleryScreen}
         />
-        <Stack.Screen
-          options={{title: 'App Photo'}}
+        <Tab.Screen
+          options={{
+            tabBarLabel: () => <Text style={{fontSize: 26}}>ADD</Text>,
+          }}
           name="addPhotoScreen"
           component={AddPhotoScreen}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
