@@ -2,6 +2,7 @@ import {
   GET_PHOTOS_PENDING,
   GET_PHOTOS_REJECTED,
   GET_PHOTOS_RESOLVED,
+  SET_PHOTO,
 } from '../../constants/actionConstants';
 
 const initial_data = {
@@ -35,6 +36,13 @@ export const photos = (state = initial_data, action) => {
         ...state,
         isLoading: false,
         errorMsg: action.payLoad,
+      };
+    }
+    case SET_PHOTO: {
+      return {
+        ...state,
+        isLoading: false,
+        photosList: action.payLoad,
       };
     }
     default: {

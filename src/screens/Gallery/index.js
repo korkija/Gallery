@@ -1,26 +1,28 @@
 import SplashScreen from 'react-native-splash-screen';
-import React, {Component, Fragment} from 'react';
-import {StyleSheet, View, Text, Image, Platform, StatusBar} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, Text, StatusBar} from 'react-native';
+import {connect} from 'react-redux';
+import {ListPhotos} from '../../components/ListPhotos/ListPhotos';
+import {getListPhotos} from '../../redux/actions/photo';
 
-export class GalleryScreen extends Component {
+class GalleryScreen extends Component {
   componentDidMount() {
+    this.props.getListPhotos();
     SplashScreen.hide();
   }
 
   render() {
+    const {isLoading, photosList} = this.props;
+    if (isLoading) {
+      return <Text>А ничего и не выросло</Text>;
+    }
     return (
-      // <Fragment>
-      //   {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-
       <View style={styles.container}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
-        {/*<Image*/}
-        {/*  style={styles.imageSplashScreen}*/}
-        {/*  source={require('../../assets/img/smoke.gif')}*/}
-        {/*/>*/}
-        <Text style={styles.textSplashScreen}>Hello Gallery</Text>
+        <View style={styles.welcomeContainer}>
+          <ListPhotos photosList={photosList} />
+        </View>
       </View>
-      // </Fragment>
     );
   }
 }
@@ -31,14 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     justifyContent: 'center',
   },
-  // content1: {
-  //   flex: 1,
-  //   backgroundColor: 'green',
-  // },
-  // content2: {
-  //   flex: 1,
-  //   backgroundColor: 'yellow',
-  // },
   imageSplashScreen: {
     flex: 1,
     resizeMode: 'contain',
@@ -50,3 +44,19 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
 });
+
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    isLoading: state.isLoading,
+    photosList: state.photosList,
+  };
+};
+
+const mapDispatchToProps = {
+  getListPhotos,
+};
+export const GalleryScreenConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(GalleryScreen);

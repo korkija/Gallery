@@ -1,8 +1,8 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text} from 'react-native';
-import {AddPhotoScreen, GalleryScreen} from '../screens';
+import {StyleSheet, Text} from 'react-native';
+import {AddPhotoScreen, GalleryScreenConnect} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,21 +15,21 @@ const ScreensStack = () => {
           cardStyle: {backgroundColor: 'transparent'},
         }}
         tabBarOptions={{
-          activeTintColor: '#B5B5B5',
+          activeTintColor: '#ffffff',
           inactiveTintColor: '#2F2E2E',
           activeBackgroundColor: '#2F2E2E',
-          inactiveBackgroundColor: '#B5B5B5',
+          inactiveBackgroundColor: '#ffffff',
         }}>
         <Tab.Screen
           options={{
-            tabBarLabel: () => <Text style={{fontSize: 26}}>Gallery</Text>,
+            tabBarLabel: () => <Text style={styles.text}>Gallery</Text>,
           }}
           name="galleryScreen"
-          component={GalleryScreen}
+          component={GalleryScreenConnect}
         />
         <Tab.Screen
           options={{
-            tabBarLabel: () => <Text style={{fontSize: 26}}>ADD</Text>,
+            tabBarLabel: () => <Text style={styles.text}>ADD</Text>,
           }}
           name="addPhotoScreen"
           component={AddPhotoScreen}
@@ -40,3 +40,8 @@ const ScreensStack = () => {
 };
 
 export default ScreensStack;
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 26,
+  },
+});

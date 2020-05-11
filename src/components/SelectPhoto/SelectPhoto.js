@@ -7,18 +7,20 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import {setPhoto} from '../../redux/actions/photo';
 
-interface InventoryProps {
-  navigation: Navigation;
-}
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+const heightWidth = windowWidth <= windowHeight ? windowWidth : windowHeight;
 
-export const SelectPhoto: React.FC<InventoryProps> = ({navigation}) => {
+export const SelectPhoto: React.FC<InventoryProps> = () => {
   const delRef = useRef(null);
   const [image, setImage] = useState(null);
-  // const [dateImage, setDateImage] = useState('');
+  const dispatch = useDispatch();
 
   const chooseGallery = () => {
     console.log('chooseGallery');
@@ -55,80 +57,86 @@ export const SelectPhoto: React.FC<InventoryProps> = ({navigation}) => {
   const cancel = () => {
     setImage(null);
   };
+  const addPhoto = () => {
+    dispatch(setPhoto({url: image.url, date: image.date}));
+  };
 
   return (
-    <SafeAreaView style={{height: '100%'}}>
+    <SafeAreaView>
       <ScrollView>
-        <View
-          style={{
-            flex: 1,
-            padding: 20,
-            marginTop: 20,
-            backgroundColor: 'green',
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              delRef.current.open();
-            }}>
-            <Image
-              source={image ? {uri: image.url} : require('../../assets/giphy.gif')}
-              style={photoPlaceholder}
-              resizeMode={'stretch'}
-            />
-          </TouchableOpacity>
-          {!!image && <Text>{image.date}</Text>}
+        <View style={stylesMain.container}>
+          <View style={stylesMain.content}>
+            <TouchableOpacity
+              onPress={() => {
+                delRef.current.open();
+              }}>
+              <Image
+                source={
+                  image ? {uri: image.url} : require('../../assets/giphy.gif')
+                }
+                style={photoPlaceholder}
+              />
+            </TouchableOpacity>
+            {image ? <Text>{image.date}</Text> : <Text>Сhoose a photo</Text>}
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={chooseCamera}
+              style={stylesMain.touchContainer}>
+              <Text style={{fontSize: 22}}>Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={chooseGallery}
+              style={[stylesMain.touchContainer, {marginTop: 5}]}>
+              <Text style={{fontSize: 22}}>Gallery</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={cancel}
+              style={[stylesMain.touchContainer, {marginTop: 5}]}>
+              <Text style={{fontSize: 22}}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={addPhoto}
+              style={[stylesMain.touchContainer, {marginTop: 5}]}>
+              <Text style={{fontSize: 22}}>Add</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <TouchableOpacity
-          onPress={chooseCamera}
-          style={stylesMain.touchContainer}>
-          <Text style={{fontSize: 22}}>Camera</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={chooseGallery}
-          style={[stylesMain.touchContainer, {marginTop: 5}]}>
-          <Text style={{fontSize: 22}}>Gallery</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={cancel}
-          style={[stylesMain.touchContainer, {marginTop: 5}]}>
-          <Text style={{fontSize: 22}}>Cancel</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 };
 const stylesMain = StyleSheet.create({
   touchContainer: {
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: 'white',
     height: 50,
     borderRadius: 10,
+    borderColor: 'grey',
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   container: {
-    backgroundColor: 'yellow',
-    paddingLeft: 20,
-    paddingRight: 20,
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    padding: 20,
+    // backgroundColor: 'green',
   },
-  header: {
-    height: 80,
-    width: '100%',
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
-    shadowColor: 'black',
-    shadowOpacity: 0.4,
-    marginBottom: 10,
+  content: {
+    flex: 1,
+    padding: 20,
+    // backgroundColor: 'yellow',
   },
   photoPlaceholder: {
-    width: 120,
-    height: 120,
-    borderRadius: 40,
+    resizeMode: 'cover',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: heightWidth * 0.7,
+    height: heightWidth * 0.7,
+    borderRadius: 10,
     marginBottom: 10,
-    backgroundColor: 'rgba(240,240,240,1)',
   },
   topBarContent: {
     flex: 1,
