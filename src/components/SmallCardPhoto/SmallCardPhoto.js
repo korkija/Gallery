@@ -4,11 +4,11 @@ import {Text, StyleSheet, Dimensions, View, Image} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 
 export const SmallCardPhoto = ({url, date}) => {
-  console.log('url ', url);
+  console.log('url ', url.length);
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerImage}>
-        <Image style={styles.images} source={url} />
+        <Image style={styles.images} source={url.length ? {uri: url} : url} />
       </View>
       <View>
         <Text style={styles.textAuthor}>

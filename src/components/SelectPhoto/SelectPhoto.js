@@ -1,4 +1,5 @@
 import React, {useState, useRef} from 'react';
+import {debounce} from 'lodash';
 import {
   View,
   StyleSheet,
@@ -57,8 +58,12 @@ export const SelectPhoto: React.FC<InventoryProps> = () => {
   const cancel = () => {
     setImage(null);
   };
+
   const addPhoto = () => {
-    dispatch(setPhoto({url: image.url, date: image.date}));
+    if (image) {
+      dispatch(setPhoto({url: image.url, date: image.date}));
+      setImage(null);
+    }
   };
 
   return (

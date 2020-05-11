@@ -42,6 +42,7 @@ const ScreensStack = () => {
 export default ScreensStack;
 const styles = StyleSheet.create({
   text: {
+    textAlign: 'center',
     fontSize: 26,
   },
 });
