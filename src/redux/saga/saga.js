@@ -32,6 +32,7 @@ function* sagaWorker() {
 
 async function axiosGet() {
   return await axios.get('/listPhotos').then(function(response) {
+    console.log('response.data', response.data);
     return response.data.date;
   });
   // getPhotosResolved(defaultPhotos));

@@ -1,19 +1,14 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  Dimensions,
-  View,
-  Image,
-} from 'react-native';
+import {Text, StyleSheet, Dimensions, View, Image} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
 export const SmallCardPhoto = ({url, date}) => {
+  console.log('url ', url);
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerImage}>
-        <Image style={styles.images} source={{uri: url}} />
+        <Image style={styles.images} source={url} />
       </View>
       <View>
         <Text style={styles.textAuthor}>
