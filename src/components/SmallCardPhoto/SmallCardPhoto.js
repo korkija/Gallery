@@ -1,21 +1,44 @@
-import React from 'react';
-import {Text, StyleSheet, Dimensions, View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  StyleSheet,
+  Dimensions,
+  View,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+
+import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
 
 export const SmallCardPhoto = ({url, date}) => {
-  console.log('url ', url.length);
+  const [isLoading, setIsLoading] = useState(false);
+  const dateForView = moment(date, 'YYYY-MM-DD H:m:s', 'ua').format(
+    'ddd DD MMM YYYY HH:mm',
+  );
+
+  const LoadEnd = () => {
+    setIsLoading(false);
+  };
+
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerImage}>
-        <Image style={styles.images} source={url.length ? {uri: url} : url} />
+        {isLoading && (
+          <ActivityIndicator
+            style={StyleSheet.absoluteFill}
+            size="large"
+            color="#000000"
+          />
+        )}
+        <Image
+          style={styles.images}
+          onLoadEnd={LoadEnd}
+          source={url.length ? {uri: url} : url}
+        />
       </View>
-      <View>
-        <Text style={styles.textAuthor}>
-          data:
-          <Text style={styles.textName}> {date}</Text>
-        </Text>
-      </View>
+      <Text style={styles.textName}>{dateForView}</Text>
     </View>
   );
 };
@@ -25,26 +48,21 @@ const styles = StyleSheet.create({
     height: windowWidth * 0.6,
   },
   images: {
-    borderRadius: 10,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     width: null,
     height: null,
     flex: 1,
+    borderRadius: 5,
   },
   containerCard: {
     borderRadius: 10,
     padding: 10,
     margin: 10,
+    flex: 1,
     flexDirection: 'column',
-  },
-  textAuthor: {
-    textAlign: 'right',
-    fontSize: 12,
-    color: 'white',
   },
   textName: {
     textAlign: 'center',
     fontSize: 18,
-    color: 'white',
   },
 });

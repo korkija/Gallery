@@ -5,6 +5,10 @@ export const URL_PHOTOS =
 
 export const defaultPhotos = [
   {
+    date: '2020-05-10 16:14:30',
+    url: Images.bigPhoto,
+  },
+  {
     date: '2020-05-10 16:14:49',
     url: Images.spinner1,
   },

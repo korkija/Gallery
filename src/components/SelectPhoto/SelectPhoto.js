@@ -1,10 +1,8 @@
-import React, {useState, useRef} from 'react';
-import {debounce} from 'lodash';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
   Text,
-  SafeAreaView,
   Image,
   TouchableOpacity,
   ScrollView,
@@ -13,15 +11,29 @@ import {
 import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import {setPhoto} from '../../redux/actions/photo';
+import {ButtonCustom} from '../ButtonCustom/ButtonCustom';
+// import {RNCamera} from 'react-native-camera';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
-const heightWidth = windowWidth <= windowHeight ? windowWidth : windowHeight;
+const heightWidth = Math.min(windowHeight, windowWidth);
 
-export const SelectPhoto: React.FC<InventoryProps> = () => {
-  const delRef = useRef(null);
+const PendingView = () => (
+  <View
+    style={{
+      flex: 1,
+      backgroundColor: 'lightgreen',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+    <Text>Waiting</Text>
+  </View>
+);
+
+export const SelectPhoto = () => {
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  let disable = !image;
 
   const chooseGallery = () => {
     console.log('chooseGallery');
@@ -54,6 +66,14 @@ export const SelectPhoto: React.FC<InventoryProps> = () => {
       }
     });
   };
+  const takePicture = async function(camera) {
+    const options = {quality: 0.5, base64: true};
+    const data = await camera.takePictureAsync(options);
+    //  eslint-disable-next-line
+    console.log(data.uri);
+    const dateNow = new Date(Date.now()).toLocaleString();
+    setImage({url: data.uri, date: dateNow});
+  };
 
   const cancel = () => {
     setImage(null);
@@ -67,48 +87,56 @@ export const SelectPhoto: React.FC<InventoryProps> = () => {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={stylesMain.container}>
-          <View style={stylesMain.content}>
-            <TouchableOpacity
-              onPress={() => {
-                delRef.current.open();
-              }}>
-              <Image
-                source={
-                  image ? {uri: image.url} : require('../../assets/giphy.gif')
-                }
-                style={photoPlaceholder}
-              />
-            </TouchableOpacity>
-            {image ? <Text>{image.date}</Text> : <Text>Сhoose a photo</Text>}
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={chooseCamera}
-              style={stylesMain.touchContainer}>
-              <Text style={{fontSize: 22}}>Camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={chooseGallery}
-              style={[stylesMain.touchContainer, {marginTop: 5}]}>
-              <Text style={{fontSize: 22}}>Gallery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={cancel}
-              style={[stylesMain.touchContainer, {marginTop: 5}]}>
-              <Text style={{fontSize: 22}}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={addPhoto}
-              style={[stylesMain.touchContainer, {marginTop: 5}]}>
-              <Text style={{fontSize: 22}}>Add</Text>
-            </TouchableOpacity>
-          </View>
+    <ScrollView>
+      <View style={stylesMain.container}>
+        <View style={stylesMain.content}>
+          <Image
+            source={
+              image ? {uri: image.url} : require('../../assets/giphy.gif')
+            }
+            style={photoPlaceholder}
+          />
+          <Text>{image ? image.date : 'Сhoose a photo'}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View>
+          <ButtonCustom title="Camera" onPress={chooseCamera} />
+          {/*<ButtonCustom title="Camera2" onPress={chooseCamera2} />*/}
+          <ButtonCustom title="Gallery" onPress={chooseGallery} />
+          <ButtonCustom title="Cancel" onPress={cancel} disabled={disable} />
+          <ButtonCustom title="Add" onPress={addPhoto} disabled={disable} />
+        </View>
+      </View>
+      {/*<RNCamera*/}
+      {/*  style={stylesMain.preview}*/}
+      {/*  type={RNCamera.Constants.Type.back}*/}
+      {/*  flashMode={RNCamera.Constants.FlashMode.on}*/}
+      {/*  androidCameraPermissionOptions={{*/}
+      {/*    title: 'Permission to use camera',*/}
+      {/*    message: 'We need your permission to use your camera',*/}
+      {/*    buttonPositive: 'Ok',*/}
+      {/*    buttonNegative: 'Cancel',*/}
+      {/*  }}*/}
+      {/*  androidRecordAudioPermissionOptions={{*/}
+      {/*    title: 'Permission to use audio recording',*/}
+      {/*    message: 'We need your permission to use your audio',*/}
+      {/*    buttonPositive: 'Ok',*/}
+      {/*    buttonNegative: 'Cancel',*/}
+      {/*  }}>*/}
+      {/*  {({camera, status, recordAudioPermissionStatus}) => {*/}
+      {/*    if (status !== 'READY') return <PendingView />;*/}
+      {/*    return (*/}
+      {/*      <View*/}
+      {/*        style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>*/}
+      {/*        <TouchableOpacity*/}
+      {/*          onPress={() => takePicture(camera)}*/}
+      {/*          style={stylesMain.capture}>*/}
+      {/*          <Text style={{fontSize: 14}}> SNAP </Text>*/}
+      {/*        </TouchableOpacity>*/}
+      {/*      </View>*/}
+      {/*    );*/}
+      {/*  }}*/}
+      {/*</RNCamera>*/}
+    </ScrollView>
   );
 };
 const stylesMain = StyleSheet.create({
@@ -127,12 +155,10 @@ const stylesMain = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'stretch',
     padding: 20,
-    // backgroundColor: 'green',
   },
   content: {
     flex: 1,
     padding: 20,
-    // backgroundColor: 'yellow',
   },
   photoPlaceholder: {
     resizeMode: 'cover',
@@ -143,33 +169,19 @@ const stylesMain = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
-  topBarContent: {
+  preview: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginLeft: 40,
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: 'rgba(118,118,118,1)',
-    marginTop: 20,
-    width: 150,
-    marginRight: 20,
-    marginBottom: 10,
-  },
-  clearAllStyle: {
-    marginRight: 20,
-    height: '80%',
-    justifyContent: 'center',
-  },
-  clearAllText: {
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  burgerIcon: {
-    width: 25,
-    height: 15,
-    marginLeft: 20,
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
   },
 });
 

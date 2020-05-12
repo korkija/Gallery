@@ -1,6 +1,6 @@
 import SplashScreen from 'react-native-splash-screen';
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, StatusBar} from 'react-native';
+import {Text} from 'react-native';
 import {connect} from 'react-redux';
 import {ListPhotos} from '../../components/ListPhotos/ListPhotos';
 import {getListPhotos} from '../../redux/actions/photo';
@@ -13,37 +13,14 @@ class GalleryScreen extends Component {
 
   render() {
     const {isLoading, photosList} = this.props;
+
     if (isLoading) {
-      return <Text>А ничего и не выросло</Text>;
+      return <Text>Loading</Text>;
     }
-    return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor="black" barStyle="light-content" />
-        <View style={styles.welcomeContainer}>
-          <ListPhotos photosList={photosList} />
-        </View>
-      </View>
-    );
+
+    return <ListPhotos photosList={photosList} />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-  },
-  imageSplashScreen: {
-    flex: 1,
-    resizeMode: 'contain',
-    width: null,
-    height: null,
-  },
-  textSplashScreen: {
-    color: 'yellow',
-    fontSize: 26,
-  },
-});
 
 const mapStateToProps = state => {
   console.log(state);

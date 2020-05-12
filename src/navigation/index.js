@@ -15,22 +15,19 @@ const ScreensStack = () => {
           cardStyle: {backgroundColor: 'transparent'},
         }}
         tabBarOptions={{
-          activeTintColor: '#ffffff',
-          inactiveTintColor: '#2F2E2E',
-          activeBackgroundColor: '#2F2E2E',
-          inactiveBackgroundColor: '#ffffff',
+          showIcon: false,
+          labelPosition: 'beside-icon',
+          labelStyle: {
+            fontSize: 20,
+          },
         }}>
         <Tab.Screen
-          options={{
-            tabBarLabel: () => <Text style={styles.text}>Gallery</Text>,
-          }}
+          options={{title: 'Gallery'}}
           name="galleryScreen"
           component={GalleryScreenConnect}
         />
         <Tab.Screen
-          options={{
-            tabBarLabel: () => <Text style={styles.text}>ADD</Text>,
-          }}
+          options={{title: 'Add'}}
           name="addPhotoScreen"
           component={AddPhotoScreen}
         />
@@ -40,9 +37,3 @@ const ScreensStack = () => {
 };
 
 export default ScreensStack;
-const styles = StyleSheet.create({
-  text: {
-    textAlign: 'center',
-    fontSize: 26,
-  },
-});

@@ -11,7 +11,7 @@ import {defaultPhotos} from '../../constants/configApp';
 
 const mock = new MockAdapter(axios);
 mock.onGet('/listPhotos').reply(200, {
-  date: defaultPhotos,
+  photos: defaultPhotos,
 });
 
 export function* sagaWatcher() {
@@ -31,9 +31,6 @@ function* sagaWorker() {
 }
 
 async function axiosGet() {
-  return await axios.get('/listPhotos').then(function(response) {
-    console.log('response.data', response.data);
-    return response.data.date;
-  });
-  // getPhotosResolved(defaultPhotos));
+  const response = await axios.get('/listPhotos');
+  return response.data.photos;
 }
