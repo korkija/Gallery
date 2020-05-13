@@ -26,25 +26,35 @@ export const AddPhotoScreen = ({navigation}) => {
   let disable = !image;
 
   const chooseGallery = () => {
-    console.log('chooseGallery');
-    let options = {};
-    ImagePicker.launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        console.log(response);
-        const dateNow = new Date(Date.now()).toLocaleString();
-        setImage({url: response.uri, date: dateNow});
-      }
+    navigation.navigate('PhoneGalleryScreen', {
+      takePicture: takePictureFromGallery,
     });
+    // console.log('chooseGallery');
+    // let options = {};
+    // ImagePicker.launchImageLibrary(options, response => {
+    //   console.log('Response = ', response);
+    //   if (response.didCancel) {
+    //     console.log('User cancelled image picker');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   } else {
+    //     console.log(response);
+    //     const dateNow = new Date(Date.now()).toLocaleString();
+    //     setImage({url: response.uri, date: dateNow});
+    //   }
+    // });
   };
+
+  const takePictureFromGallery = url => {
+    console.log('url ', url);
+
+    const dateNow = new Date(Date.now()).toLocaleString();
+    setImage({url: url, date: dateNow});
+  };
+
   const chooseCamera = () => {
     navigation.navigate('CameraScreen', {
       takePicture: takePicture,
-      test: 123456,
     });
   };
   const takePicture = async function(camera) {
@@ -65,6 +75,7 @@ export const AddPhotoScreen = ({navigation}) => {
     }
   };
 
+  console.log('image ', image);
   return (
     <ScrollView>
       <View style={stylesMain.container}>
