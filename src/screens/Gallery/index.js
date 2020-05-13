@@ -13,7 +13,6 @@ class GalleryScreen extends Component {
 
   render() {
     const {isLoading, photosList} = this.props;
-
     if (isLoading) {
       return <Text>Loading</Text>;
     }
@@ -23,7 +22,6 @@ class GalleryScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     isLoading: state.isLoading,
     photosList: state.photosList,

@@ -42,7 +42,7 @@ export const SmallCardPhoto = ({url, date, onPress}) => {
           <Image
             style={styles.images}
             onLoadEnd={LoadEnd}
-            source={url.length ? {uri: url} : url}
+            source={{uri: url}}
           />
         </View>
       </TouchableOpacity>

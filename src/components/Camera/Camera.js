@@ -4,20 +4,13 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const PendingView = () => (
-  <View
-    style={{
-      flex: 1,
-      backgroundColor: 'lightgreen',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
+  <View style={stylesMain.waiting}>
     <Text>Waiting</Text>
   </View>
 );
 
 export const Camera = ({takePicture}) => {
   const navigation = useNavigation();
-  console.log('takePicture', takePicture);
 
   const takePhoto = camera => {
     takePicture(camera);
@@ -42,10 +35,11 @@ export const Camera = ({takePicture}) => {
         buttonNegative: 'Cancel',
       }}>
       {({camera, status, recordAudioPermissionStatus}) => {
-        if (status !== 'READY') return <PendingView />;
+        if (status !== 'READY') {
+          return <PendingView />;
+        }
         return (
-          <View
-            style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+          <View style={stylesMain.camera}>
             <TouchableOpacity
               onPress={() => takePhoto(camera)}
               style={stylesMain.capture}>
@@ -71,4 +65,11 @@ const stylesMain = StyleSheet.create({
     alignSelf: 'center',
     margin: 20,
   },
+  waiting: {
+    flex: 1,
+    backgroundColor: 'lightgreen',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  camera: {flex: 0, flexDirection: 'row', justifyContent: 'center'},
 });

@@ -1,61 +1,35 @@
-import React, {useEffect, useState} from 'react';
-import CameraRoll from '@react-native-community/cameraroll';
-import {StyleSheet, Text, View} from 'react-native';
-import moment from 'moment';
+import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {ListPhotos} from '../../components/ListPhotos/ListPhotos';
-import {Camera} from '../../components/Camera/Camera';
+import {getPhotosPhone} from '../../redux/actions/photo';
+import {useDispatch, useSelector} from 'react-redux';
 
 export const PhoneGalleryScreen = ({route}) => {
-  const [photosList, setPhotosList] = useState(null);
-  const isLoading = !!photosList;
-
-  const takePhotos = async () => {
-    const data = await CameraRoll.getPhotos({
-      first: 20,
-      assetType: 'All',
-    });
-
-    const arr = data.edges.map(item => {
-      return {
-        date: moment(new Date(item.node.timestamp), 'LLLL', 'ua').format(
-          'YYYY-MM-DD H:m:s',
-        ),
-        url: item.node.image.uri,
-      };
-    });
-    setPhotosList(arr);
-  };
+  const photosPhoneList = useSelector(state => state.photosPhoneList);
+  const dispatch = useDispatch();
+  const isLoading = !!photosPhoneList;
 
   useEffect(() => {
-    takePhotos();
-    console.log('mounted');
+    dispatch(getPhotosPhone());
   }, []);
 
-  // return <View style={styles.container} />;
-  console.log('photosList', photosList);
-  if (isLoading)
+  if (isLoading) {
     return (
       <ListPhotos
         style={styles.container}
         takePicture={route.params.takePicture}
-        photosList={photosList}
+        photosList={photosPhoneList}
+        getNewData={() => dispatch(getPhotosPhone())}
       />
     );
-  else return <View style={styles.container} />;
+  } else {
+    return <View style={styles.container} />;
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
   },
 });

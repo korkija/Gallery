@@ -14,7 +14,6 @@ const ScreensStack = () => {
         mode="modal"
         screenOptions={{
           headerShown: false,
-          // cardStyle: {backgroundColor: 'transparent'},
         }}>
         <Stack.Screen name="AppStack" component={AppTab} />
         <Stack.Screen name="CameraScreen" component={CameraScreen} />

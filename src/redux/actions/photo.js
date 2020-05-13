@@ -2,9 +2,13 @@ import {
   GET_PHOTOS_PENDING,
   GET_PHOTOS_REJECTED,
   GET_PHOTOS_RESOLVED,
+  GET_PHOTOS_PHONE_RESOLVED,
+  SET_INDEX_PHOTO_PHONE_LIST,
   GET_PHOTOS,
   SET_PHOTO,
 } from '../../constants/actionConstants';
+import CameraRoll from '@react-native-community/cameraroll';
+import moment from 'moment';
 
 export const setPhoto = newPhoto => (dispatch, getState) => {
   const {photosList} = getState();
@@ -13,6 +17,10 @@ export const setPhoto = newPhoto => (dispatch, getState) => {
 };
 const setPhotoAction = payLoad => ({
   type: SET_PHOTO,
+  payLoad,
+});
+const setIndexPhotosPhoneList = payLoad => ({
+  type: SET_INDEX_PHOTO_PHONE_LIST,
   payLoad,
 });
 
@@ -33,3 +41,29 @@ export const getPhotosRejected = () => ({
 export const getListPhotos = () => ({
   type: GET_PHOTOS,
 });
+
+const getPhotosPhoneResolved = payLoad => ({
+  type: GET_PHOTOS_PHONE_RESOLVED,
+  payLoad,
+});
+
+export const getPhotosPhone = () => (dispatch, getState) => {
+  const {photosPhoneList, indexPhotosPhoneList} = getState();
+  const takePhotos = async () => {
+    const data = await CameraRoll.getPhotos({
+      first: 5,
+      after: indexPhotosPhoneList.toString(),
+    });
+    const arr = data.edges.map(item => {
+      return {
+        date: moment(new Date(item.node.timestamp), 'LLLL', 'ua').format(
+          'YYYY-MM-DD H:m:s',
+        ),
+        url: item.node.image.uri,
+      };
+    });
+    dispatch(setIndexPhotosPhoneList(data.page_info.end_cursor));
+    dispatch(getPhotosPhoneResolved([...photosPhoneList, ...arr]));
+  };
+  takePhotos();
+};

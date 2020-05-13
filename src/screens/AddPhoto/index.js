@@ -8,11 +8,9 @@ import {
   Dimensions,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-// import {useNavigation} from '@react-navigation/native';
-import ImagePicker from 'react-native-image-picker';
 import {setPhoto} from '../../redux/actions/photo';
+import giphy from '../../assets/index';
 import {ButtonCustom} from '../../components/ButtonCustom/ButtonCustom';
-// import {Camera} from '../Camera/Camera';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -20,34 +18,16 @@ const heightWidth = Math.min(windowHeight, windowWidth);
 
 export const AddPhotoScreen = ({navigation}) => {
   const [image, setImage] = useState(null);
-  // const [hideCamera, setHideCamera] = useState(true);
   const dispatch = useDispatch();
-  // const navigation = useNavigation();
   let disable = !image;
 
   const chooseGallery = () => {
     navigation.navigate('PhoneGalleryScreen', {
       takePicture: takePictureFromGallery,
     });
-    // console.log('chooseGallery');
-    // let options = {};
-    // ImagePicker.launchImageLibrary(options, response => {
-    //   console.log('Response = ', response);
-    //   if (response.didCancel) {
-    //     console.log('User cancelled image picker');
-    //   } else if (response.error) {
-    //     console.log('ImagePicker Error: ', response.error);
-    //   } else {
-    //     console.log(response);
-    //     const dateNow = new Date(Date.now()).toLocaleString();
-    //     setImage({url: response.uri, date: dateNow});
-    //   }
-    // });
   };
 
   const takePictureFromGallery = url => {
-    console.log('url ', url);
-
     const dateNow = new Date(Date.now()).toLocaleString();
     setImage({url: url, date: dateNow});
   };
@@ -75,15 +55,12 @@ export const AddPhotoScreen = ({navigation}) => {
     }
   };
 
-  console.log('image ', image);
   return (
     <ScrollView>
       <View style={stylesMain.container}>
         <View style={stylesMain.content}>
           <Image
-            source={
-              image ? {uri: image.url} : require('../../assets/giphy.gif')
-            }
+            source={image ? {uri: image.url} : giphy.giphy}
             style={stylesMain.photoPlaceholder}
           />
           <Text>{image ? image.date : 'Сhoose a photo'}</Text>
@@ -99,16 +76,6 @@ export const AddPhotoScreen = ({navigation}) => {
   );
 };
 const stylesMain = StyleSheet.create({
-  touchContainer: {
-    marginTop: 5,
-    backgroundColor: 'white',
-    height: 50,
-    borderRadius: 10,
-    borderColor: 'grey',
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     justifyContent: 'space-between',
@@ -127,19 +94,5 @@ const stylesMain = StyleSheet.create({
     height: heightWidth * 0.7,
     borderRadius: 10,
     marginBottom: 10,
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
   },
 });
