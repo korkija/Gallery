@@ -1,5 +1,6 @@
 import React from 'react';
 import {RNCamera} from 'react-native-camera';
+import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const PendingView = () => (
@@ -14,10 +15,18 @@ const PendingView = () => (
   </View>
 );
 
-export const Camera = ({takePicture, heightWidth}) => {
+export const Camera = ({takePicture}) => {
+  const navigation = useNavigation();
+  console.log('takePicture', takePicture);
+
+  const takePhoto = camera => {
+    takePicture(camera);
+    navigation.navigate('addPhotoScreen');
+  };
+
   return (
     <RNCamera
-      style={[stylesMain.preview, {width: heightWidth}]}
+      style={[stylesMain.preview]}
       type={RNCamera.Constants.Type.back}
       flashMode={RNCamera.Constants.FlashMode.on}
       androidCameraPermissionOptions={{
@@ -38,7 +47,7 @@ export const Camera = ({takePicture, heightWidth}) => {
           <View
             style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
             <TouchableOpacity
-              onPress={() => takePicture(camera)}
+              onPress={() => takePhoto(camera)}
               style={stylesMain.capture}>
               <Text style={{fontSize: 14}}> SNAP </Text>
             </TouchableOpacity>
@@ -51,11 +60,7 @@ export const Camera = ({takePicture, heightWidth}) => {
 const stylesMain = StyleSheet.create({
   preview: {
     flex: 1,
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    position: 'absolute',
-    height: '90%',
-    // position: 'relative',
   },
   capture: {
     flex: 0,

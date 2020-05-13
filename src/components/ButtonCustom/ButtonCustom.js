@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: 'grey',
-    // backgroundColor: 'white',
     margin: 3,
   },
   textTitle: {

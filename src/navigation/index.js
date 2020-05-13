@@ -1,37 +1,23 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, Text} from 'react-native';
-import {AddPhotoScreen, GalleryScreenConnect} from '../screens';
+import {createStackNavigator} from '@react-navigation/stack';
+import {CameraScreen} from '../screens/CameraScreen';
+import AppTab from './AppTab';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const ScreensStack = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      <Stack.Navigator
+        mode="modal"
         screenOptions={{
           headerShown: false,
           cardStyle: {backgroundColor: 'transparent'},
-        }}
-        tabBarOptions={{
-          showIcon: false,
-          labelPosition: 'beside-icon',
-          labelStyle: {
-            fontSize: 20,
-          },
         }}>
-        <Tab.Screen
-          options={{title: 'Gallery'}}
-          name="galleryScreen"
-          component={GalleryScreenConnect}
-        />
-        <Tab.Screen
-          options={{title: 'Add'}}
-          name="addPhotoScreen"
-          component={AddPhotoScreen}
-        />
-      </Tab.Navigator>
+        <Stack.Screen name="AppStack" component={AppTab} />
+        <Stack.Screen name="CameraScreen" component={CameraScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
