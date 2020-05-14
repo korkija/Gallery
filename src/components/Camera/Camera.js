@@ -14,6 +14,7 @@ export const Camera = ({takePicture}) => {
 
   const takePhoto = camera => {
     takePicture(camera);
+    // setTimeout(navigation.navigate('addPhotoScreen'), 250);
     navigation.navigate('addPhotoScreen');
   };
 
@@ -22,6 +23,10 @@ export const Camera = ({takePicture}) => {
       style={[stylesMain.preview]}
       type={RNCamera.Constants.Type.back}
       flashMode={RNCamera.Constants.FlashMode.on}
+      permissionDialogTitle={'Permission to use camera'}
+      permissionDialogMessage={
+        'We need your permission to use your camera phone'
+      }
       androidCameraPermissionOptions={{
         title: 'Permission to use camera',
         message: 'We need your permission to use your camera',

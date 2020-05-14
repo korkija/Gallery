@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import moment from 'moment';
+// import moment from 'moment';
+// import 'moment/min/locales';
+// import 'moment/locale/ua';
 import {useNavigation} from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
@@ -17,9 +19,12 @@ const windowWidth = Dimensions.get('window').width;
 export const SmallCardPhoto = ({url, date, onPress}) => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const dateForView = moment(date, 'YYYY-MM-DD H:m:s', 'ua').format(
-    'ddd DD MMM YYYY HH:mm',
-  );
+  console.log('moment');
+  // console.log(moment.locales());
+  const dateForView = date;
+  // const dateForView = moment(date, 'YYYY-MM-DD H:m:s').format(
+  //   'ddd DD MMM YYYY HH:mm',
+  // );
   const onPressBack = urlPhoto => {
     onPress(urlPhoto);
     navigation.navigate('addPhotoScreen');

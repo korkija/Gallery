@@ -10,9 +10,17 @@ export const PhoneGalleryScreen = ({route}) => {
   const isLoading = !!photosPhoneList;
 
   useEffect(() => {
-    dispatch(getPhotosPhone());
-  }, []);
-
+    try {
+      alert('PhoneGalleryScreen');
+      dispatch(getPhotosPhone());
+    } catch (e) {
+      if (e) {
+        throw e;
+      }
+    }
+  }, [dispatch]);
+  console.log('photosPhoneList ', photosPhoneList);
+  alert(photosPhoneList);
   if (isLoading) {
     return (
       <ListPhotos

@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import {setPhoto} from '../../redux/actions/photo';
 import giphy from '../../assets/index';
 import {ButtonCustom} from '../../components/ButtonCustom/ButtonCustom';
+import moment from 'moment';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -38,10 +39,21 @@ export const AddPhotoScreen = ({navigation}) => {
     });
   };
   const takePicture = async function(camera) {
-    const options = {quality: 0.5, base64: true};
-    const data = await camera.takePictureAsync(options);
-    const dateNow = new Date(Date.now()).toLocaleString();
-    setImage({url: data.uri, date: dateNow});
+    try {
+      const options = {quality: 0.5, base64: true};
+      const data = await camera.takePictureAsync(options);
+      const dateNow = moment(new Date(Date.now()), 'YYYY-MM-DD H:m:s').format(
+        'YYYY-MM-DD H:m:s',
+      );
+      setImage({url: data.uri, date: dateNow});
+      alert(data.uri);
+    } catch (e) {
+      console.warn(e);
+      console.log(e);
+      if (e) {
+        throw e;
+      }
+    }
   };
 
   const cancel = () => {
