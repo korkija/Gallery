@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: windowWidth * 0.6,
   },
   images: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: null,
     height: null,
     flex: 1,
