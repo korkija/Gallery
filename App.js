@@ -1,9 +1,7 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
+ * App Gallery.
+ * You can add pictures from the phone gallery
+ * or by taking a picture of the camera
  */
 
 import React from 'react';

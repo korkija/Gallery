@@ -1,3 +1,8 @@
+/**
+ * Screen for phone gallery.
+ * with paging on FlatList
+ */
+
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ListPhotos} from '../../components/ListPhotos/ListPhotos';
@@ -10,17 +15,8 @@ export const PhoneGalleryScreen = ({route}) => {
   const isLoading = !!photosPhoneList;
 
   useEffect(() => {
-    try {
-      alert('PhoneGalleryScreen');
-      dispatch(getPhotosPhone());
-    } catch (e) {
-      if (e) {
-        throw e;
-      }
-    }
+    dispatch(getPhotosPhone());
   }, [dispatch]);
-  console.log('photosPhoneList ', photosPhoneList);
-  alert(photosPhoneList);
   if (isLoading) {
     return (
       <ListPhotos

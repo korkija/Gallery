@@ -1,3 +1,7 @@
+/**
+ * Screen for Main gallery App.
+ */
+
 import SplashScreen from 'react-native-splash-screen';
 import React, {Component} from 'react';
 import {Text, PermissionsAndroid} from 'react-native';
@@ -35,8 +39,6 @@ class GalleryScreen extends Component {
   componentDidMount() {
     this.props.getListPhotos();
     SplashScreen.hide();
-    // this.checkPermissions();
-    console.log(this.checkPermissions());
     this.setState({permissionsRead: this.checkPermissions()});
   }
 

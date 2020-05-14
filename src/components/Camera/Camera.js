@@ -2,19 +2,20 @@ import React from 'react';
 import {RNCamera} from 'react-native-camera';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import moment from 'moment';
 
-const PendingView = () => (
-  <View style={stylesMain.waiting}>
-    <Text>Waiting</Text>
-  </View>
-);
+const PendingView = () => <Text style={stylesMain.waiting}>Waiting</Text>;
 
 export const Camera = ({takePicture}) => {
   const navigation = useNavigation();
 
-  const takePhoto = camera => {
-    takePicture(camera);
-    // setTimeout(navigation.navigate('addPhotoScreen'), 250);
+  const takePhoto = async camera => {
+    const options = {quality: 0.5, base64: true};
+    const data = await camera.takePictureAsync(options);
+    const dateNow = moment(new Date(Date.now()), 'YYYY-MM-DD H:m:s').format(
+      'YYYY-MM-DD H:m:s',
+    );
+    takePicture({url: data.uri, date: dateNow});
     navigation.navigate('addPhotoScreen');
   };
 
@@ -22,7 +23,8 @@ export const Camera = ({takePicture}) => {
     <RNCamera
       style={[stylesMain.preview]}
       type={RNCamera.Constants.Type.back}
-      flashMode={RNCamera.Constants.FlashMode.on}
+      flashMode={RNCamera.Constants.FlashMode.auto}
+      defaultTouchToFocus
       permissionDialogTitle={'Permission to use camera'}
       permissionDialogMessage={
         'We need your permission to use your camera phone'
@@ -48,7 +50,7 @@ export const Camera = ({takePicture}) => {
             <TouchableOpacity
               onPress={() => takePhoto(camera)}
               style={stylesMain.capture}>
-              <Text style={{fontSize: 14}}> SNAP </Text>
+              <Text style={stylesMain.cameraButton}> SNAP </Text>
             </TouchableOpacity>
           </View>
         );
@@ -72,9 +74,20 @@ const stylesMain = StyleSheet.create({
   },
   waiting: {
     flex: 1,
+    fontSize: 24,
+    fontFamily: 'Arial',
+    // resizeMode: 'cover',
+    width: '100%',
     backgroundColor: 'lightgreen',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
-  camera: {flex: 0, flexDirection: 'row', justifyContent: 'center'},
+  camera: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  cameraButton: {
+    fontSize: 14,
+  },
 });
